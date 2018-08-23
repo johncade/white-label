@@ -1,0 +1,323 @@
+{
+  "swagger": "2.0",
+  "info": {
+    "version": "1.0.0",
+    "title": "white-label",
+    "description": "KindHealth Partnership API"
+  },
+  "basePath": "/api/v1",
+  "tags": [
+    {
+      "name": "Examples",
+      "description": "Simple example endpoints"
+    },
+    {
+      "name": "Specification",
+      "description": "The swagger API specification"
+    },
+    {
+      "name": "White Label Referral API",
+      "description": "a Referral is posted, api responds with a redirect to a white labeled experience"
+    }
+  ],
+  "consumes": [
+    "application/json"
+  ],
+  "produces": [
+    "application/json"
+  ],
+  "paths": {
+    "/wl": {
+      "post": {
+        "tags": [
+          "White Label Referral API"
+        ],
+        "parameters": [
+          {
+            "in": "body",
+            "name": "body",
+            "required": true,
+            "description": "Request object with primary and dependents",
+            "schema": {
+              "$ref": "#/definitions/Referral"
+            }
+          }
+        ],
+        "consumes": [
+          "application/json"
+        ],
+        "produces": [
+          "application/json"
+        ],
+        "responses": {
+          "301": {
+            "description": "Redirect to url"
+          },
+          "404": {
+            "description": "Redirect not found"
+          }
+        }
+      }
+    },
+    "/spec": {
+      "get": {
+        "tags": [
+          "Specification"
+        ],
+        "responses": {
+          "200": {
+            "description": "Return the API specification"
+          }
+        }
+      }
+    }
+  },
+  "definitions": {
+    "Referral": {
+      "description": "Represents the body of the request",
+      "required": [
+        "session_id",
+        "dob",
+        "tobacco",
+        "zip_code",
+        "state_code"
+      ],
+      "properties": {
+        "session_id": {
+          "type": "string",
+          "description": "Session UUID from referer",
+          "format": "uuid",
+          "example": "45745c60-7b1a-11e8-9c9c-2d42b21b1a3e"
+        },
+        "step": {
+          "type": "string",
+          "description": "The step of the shop flow that the applicant is being referred to",
+          "enum": [
+            "begin",
+            "plan_rec",
+            "all_plans",
+            "plan_detail",
+            "review",
+            "application"
+          ],
+          "example": "plan_rec"
+        },
+        "first_name": {
+          "type": "string",
+          "description": "First name of primary applicant",
+          "example": "Ben"
+        },
+        "middle_initial": {
+          "type": "string",
+          "description": "Middle initial of primary applicant",
+          "example": "M"
+        },
+        "last_name": {
+          "type": "string",
+          "description": "Last name of primary applicant",
+          "example": "Button"
+        },
+        "suffix": {
+          "type": "string",
+          "enum": [
+            "mr",
+            "mrs",
+            "miss",
+            "jr",
+            "sr",
+            "dr"
+          ],
+          "description": "Primary applicant suffix"
+        },
+        "email": {
+          "type": "string",
+          "format": "email",
+          "description": "Email address of primary applicant",
+          "example": "bbutton@gmail.com"
+        },
+        "phone": {
+          "type": "string",
+          "description": "Contact phone number for primary applicant",
+          "example": "5124592222"
+        },
+        "gender": {
+          "type": "string",
+          "description": "Primary applicant's gender",
+          "enum": [
+            "male",
+            "female"
+          ],
+          "example": "male"
+        },
+        "dob": {
+          "type": "string",
+          "format": "date",
+          "description": "Primary applicant's date of birth YYYY-MM-DD ( RFC 3339, section 5.6)",
+          "example": "1990-03-21"
+        },
+        "height": {
+          "type": "number",
+          "description": "Primary applicant's height",
+          "example": 6.1
+        },
+        "weight": {
+          "type": "number",
+          "description": "Primary applicant's weight",
+          "example": 175
+        },
+        "tobacco": {
+          "description": "Flag for tobacco use by primary applicant",
+          "type": "boolean",
+          "example": false
+        },
+        "zip_code": {
+          "description": "Primary applicant's zip code",
+          "type": "string",
+          "example": "78725"
+        },
+        "fips_code": {
+          "description": "Primary applicant's county fips code",
+          "type": "string",
+          "example": "4543"
+        },
+        "state_code": {
+          "type": "string",
+          "description": "Primary applicant's state of residence",
+          "example": "TX"
+        },
+        "preferred_language": {
+          "description": "Preferred language of the primary applicant.",
+          "enum": [
+            "english",
+            "spanish"
+          ],
+          "type": "string",
+          "example": "english"
+        },
+        "dependents": {
+          "description": "List of dependents, and their demographics",
+          "type": "array",
+          "items": {
+            "$ref": "#/definitions/Dependent"
+          },
+          "example": [
+            {
+              "relationship": "dependent",
+              "dob": "1993-01-03",
+              "first_name": "Gatsby",
+              "middle_initial": "B",
+              "last_name": "Button",
+              "suffix": "dr",
+              "gender": "male",
+              "height": 5.7,
+              "weight": 134,
+              "tobacco": true
+            }
+          ]
+        }
+      }
+    },
+    "Dependent": {
+      "description": "dependent",
+      "uniqueItems": true,
+      "required": [
+        "tobacco",
+        "dob"
+      ],
+      "type": "object",
+      "properties": {
+        "relationship": {
+          "description": "dependent's relation to primary applicant",
+          "type": "string",
+          "enum": [
+            "spouse",
+            "dependent"
+          ],
+          "example": "dependent"
+        },
+        "dob": {
+          "type": "string",
+          "format": "date",
+          "description": "Dependent's date of birth YYYY-MM-DD ( RFC 3339, section 5.6)",
+          "example": "1993-01-03"
+        },
+        "first_name": {
+          "type": "string",
+          "description": "dependent's first name",
+          "example": "Gatsby"
+        },
+        "middle_initial": {
+          "type": "string",
+          "description": "dependent's middle initial",
+          "example": "B"
+        },
+        "last_name": {
+          "type": "string",
+          "description": "dependent's last name",
+          "example": "Button"
+        },
+        "suffix": {
+          "type": "string",
+          "description": "dependent's suffix",
+          "enum": [
+            "mr",
+            "mrs",
+            "miss",
+            "jr",
+            "sr",
+            "dr"
+          ],
+          "example": "dr"
+        },
+        "gender": {
+          "type": "string",
+          "description": "dependent's gender",
+          "enum": [
+            "male",
+            "female"
+          ],
+          "example": "male"
+        },
+        "height": {
+          "type": "number",
+          "description": "dependent's height",
+          "example": 5.7
+        },
+        "weight": {
+          "type": "number",
+          "description": "dependent's weight",
+          "example": 134
+        },
+        "tobacco": {
+          "description": "Flag for tobacco use by dependent",
+          "type": "boolean",
+          "example": true
+        }
+      }
+    },
+    "Session": {
+      "description": "Session object returned from `GET` request to API",
+      "properties": {
+        "planId": {
+          "type": "string",
+          "description": "Plan ID of selected plan",
+          "example": "1b671a64-40d5-491e-99b0-da01ff1f3341"
+        },
+        "step": {
+          "type": "string",
+          "description": "The step of the shop flow that the applicant ended on",
+          "enum": [
+            "begin",
+            "plan_rec",
+            "all_plans",
+            "plan_detail",
+            "review",
+            "application",
+            "enrolled"
+          ],
+          "example": "enrolled"
+        }
+      }
+    }
+  }
+}
