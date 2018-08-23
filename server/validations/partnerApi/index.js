@@ -1,6 +1,7 @@
 import Joi from 'joi';
 
-export const DependentSchema = () => Joi.object().keys({
+export const DependentSchema = Joi.object().keys({
+  relationship: Joi.string().valid('spouse', 'dependent'),
   first_name: Joi.string().alphanum().min(2).max(30),
   middle_initial: Joi.string().alphanum().min(1).max(30),
   last_name: Joi.string().alphanum().min(2).max(30),
@@ -12,7 +13,7 @@ export const DependentSchema = () => Joi.object().keys({
   tobacco: Joi.boolean().required(),
 });
 
-export const QuoteSchema = () => Joi.object().keys({
+export const QuoteSchema = Joi.object().keys({
   session_id: Joi.string().required(),
   step: Joi.string().valid(['begin', 'plan_rec', 'all_plans', 'plan_detail', 'review', 'application']).required(),
   first_name: Joi.string().alphanum().min(2).max(30),

@@ -18,10 +18,12 @@
     "express-request-id": "^1.4.0",
     "joi": "^13.6.0",
     "pino": "^4.17.6",
+    "request-error-handler": "^1.1.0",
     "source-map-support": "^0.5.4",
     "swagger-express-middleware": "^1.0.0-alpha.12",
     "swagger-ui-express": "^3.0.10",
-    "uuid": "^3.3.2"
+    "uuid": "^3.3.2",
+    "yamljs": "^0.3.0"
   },
   "devDependencies": {
     "babel-eslint": "^8.2.2",
