@@ -15,11 +15,11 @@ export class Controller {
     PartnerService
       .qoute(req.body)
       .then(() => {
-        res.redirect(301, 'https://kindhealth.co');
+        res.redirect('https://kindhealth.co');
       })
       .catch(err => {
         logger.error(err);
-        res.set('uuid', uuidv1()).status(500).json({ message: 'There was an error generating your qoute.' });
+        res.set('uuid', uuidv1()).status(404).json({ message: err ? err.message : 'There was an error generating your qoute.' });
       });
   }
 

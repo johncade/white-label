@@ -5,6 +5,7 @@ import * as http from 'http';
 import * as os from 'os';
 import cookieParser from 'cookie-parser';
 import expressRequestId from 'express-request-id';
+import requestErrorHandler from 'request-error-handler';
 import swaggerify from './swagger';
 import l from './logger';
 
@@ -13,15 +14,13 @@ const app = new Express();
 export default class ExpressServer {
   constructor() {
     const root = path.normalize(`${__dirname}/../..`);
+    app.use(requestErrorHandler());
     app.use(expressRequestId());
     app.set('appPath', `${root}client`);
     app.use(bodyParser.json());
     app.use(bodyParser.urlencoded({ extended: true }));
     app.use(cookieParser(process.env.SESSION_SECRET));
-    app.use(Express.static(`${root}/public`));
-    app.get('/', (req, res) => {
-      res.redirect('api-explorer');
-    });
+    // app.use(Express.static(`${root}/public`));
   }
 
   router(routes) {

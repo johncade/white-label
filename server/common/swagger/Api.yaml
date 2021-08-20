@@ -17,6 +17,15 @@ produces:
   - application/json
 paths:
   /wl:
+    options:
+      responses:
+        '200': 
+          description: Preflight check passed.
+          produces:
+            - application/json
+          example: {status: 'Ok'}
+        '301':
+          description: 'foo'
     post:
       tags:
       - White Label Referral API
@@ -32,48 +41,46 @@ paths:
       produces:
         - application/json
       responses:
-        '301':
+        '302':
           description: Redirect to url
-        '404':
-          description: Redirect not found
-  /examples:
-    get:
-      tags:
-        - Examples
-      description: Fetch all examples
-      responses:
-        200:
-          description: Returns all examples
-    post:
-      tags:
-        - Examples
-      description: Create a new example
-      parameters:
-        - name: example
-          in: body
-          description: an example
-          required: true
-          schema: 
-            $ref: "#/definitions/ExampleBody"
-      responses:
-        200:
-          description: Returns all examples
+  # /examples:
+  #   get:
+  #     tags:
+  #       - Examples
+  #     description: Fetch all examples
+  #     responses:
+  #       200:
+  #         description: Returns all examples
+  #   post:
+  #     tags:
+  #       - Examples
+  #     description: Create a new example
+  #     parameters:
+  #       - name: example
+  #         in: body
+  #         description: an example
+  #         required: true
+  #         schema: 
+  #           $ref: "#/definitions/ExampleBody"
+  #     responses:
+  #       200:
+  #         description: Returns all examples
 
-  /examples/{id}:
-    get:
-      tags:
-        - Examples
-      parameters:
-        - name: id
-          in: path
-          required: true
-          description: The id of the example to retrieve
-          type: integer
-      responses:
-        200:
-          description: Return the example with the specified id
-        404:
-          description: Example not found
+  # /examples/{id}:
+  #   get:
+  #     tags:
+  #       - Examples
+  #     parameters:
+  #       - name: id
+  #         in: path
+  #         required: true
+  #         description: The id of the example to retrieve
+  #         type: integer
+  #     responses:
+  #       200:
+  #         description: Return the example with the specified id
+  #       404:
+  #         description: Example not found
 
   /spec:
     get:
@@ -84,15 +91,15 @@ paths:
           description: Return the API specification
 
 definitions:
-  ExampleBody:
-    type: object
-    title: example
-    required:
-      - name
-    properties:
-      name:
-        type: string
-        example: no_stress
+  # ExampleBody:
+  #   type: object
+  #   title: example
+  #   required:
+  #     - name
+  #   properties:
+  #     name:
+  #       type: string
+  #       example: no_stress
   Referral:
     description: Represents the body of the request
     required:
@@ -158,7 +165,6 @@ definitions:
         example: male
       dob:
         type: string
-        format: date
         description: Primary applicant's date of birth YYYY-MM-DD ( RFC 3339, section 5.6)
         example: '1990-03-21'
       height:
@@ -197,20 +203,6 @@ definitions:
         type: array
         items:
           $ref: '#/definitions/Dependent'
-        example: [
-    {
-      "relationship": "dependent",
-      "dob": "1993-01-03",
-      "first_name": "Gatsby",
-      "middle_initial": "B",
-      "last_name": "Button",
-      "suffix": "dr",
-      "gender": "male",
-      "height": 5.7,
-      "weight": 134,
-      "tobacco": true
-    }
-  ]
   Dependent:
     description: dependent
     uniqueItems: true
@@ -289,6 +281,6 @@ definitions:
           - plan_detail
           - review
           - application
-          - enrolled
-        example: enrolled
+          - complete
+        example: complete
 
